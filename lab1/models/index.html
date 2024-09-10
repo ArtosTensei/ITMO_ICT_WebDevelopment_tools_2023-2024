@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Модели - Лабораторные работы Саунин Антон</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "\u041c\u043e\u0434\u0435\u043b\u0438";
+        var mkdocs_page_input_path = "lab1\\models.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Лабораторные работы Саунин Антон
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Лабораторная работа №1</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../configuration/">Основы проекта</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Модели</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#user">User</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#area">Area</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#place">Place</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#travel">Travel</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#traveltogether">TravelTogether</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../endpoints/">Эндпойнты</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../routes/">Роутер</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Лабораторная работа №2</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lab2/task-1/">Задание 1</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lab2/task-2/">Задание 2</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Лабораторная работа №3</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lab3/base/">Основы проекта</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lab3/docker/">Докер</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lab3/celery/">Celery</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Лабораторные работы Саунин Антон</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Лабораторная работа №1</li>
+      <li class="breadcrumb-item active">Модели</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="_1">Модели</h1>
+<p>В данном проекте реализованы следующие модели:</p>
+<ul>
+<li><code>User</code> - Пользователь системы путешествий</li>
+<li><code>Area</code> - Город, Район или область</li>
+<li><code>Place</code> - Место в городе (отель, достопримечательность)</li>
+<li><code>Travel</code> - Путешествие</li>
+<li><code>TravelTogether</code> - Совместное путешествие</li>
+</ul>
+<h2 id="user">User</h2>
+<pre><code class="language-Python">class UserBase(SQLModel):
+    username: str
+
+
+class UserCreate(UserBase):
+    password: str
+
+
+class UserShow(UserBase):
+    travels: Optional[List[&quot;Travel&quot;]] = None
+    traveltogethers: Optional[List[&quot;TravelTogether&quot;]] = None
+
+class User(UserCreate, table=True):
+    id: int = Field(default=None, primary_key=True)
+    travels: Optional[List[&quot;Travel&quot;]] = Relationship(
+    back_populates=&quot;travellers&quot;, link_model=TravelTogether
+    )
+    traveltogethers: Optional[List[&quot;TravelTogether&quot;]] = Relationship(back_populates=&quot;travellers&quot;)
+
+class ChangePassword(SQLModel):
+    old_password: str
+    new_password: str
+</code></pre>
+<h2 id="area">Area</h2>
+<pre><code class="language-Python">class AreaBase(SQLModel):
+    name: str
+    description: str
+
+
+class AreaShow(AreaBase):
+    places: Optional[List[&quot;Place&quot;]] = None
+
+
+class Area(AreaBase, table=True):
+    id: int = Field(default=None, primary_key=True)
+    places: Optional[List[&quot;Place&quot;]] = Relationship(back_populates=&quot;area&quot;,
+                                                   sa_relationship_kwargs={
+                                                       &quot;cascade&quot;: &quot;all, delete&quot;,
+                                                   }
+                                                   )
+    from_location: Optional[&quot;Travel&quot;] = Relationship(back_populates=&quot;location_from&quot;,
+                                                     sa_relationship_kwargs=
+                                                     dict(foreign_keys=&quot;[Travel.location_from_id]&quot;),
+                                                     )
+
+    to_location: Optional[&quot;Travel&quot;] = Relationship(back_populates=&quot;location_to&quot;,
+                                                   sa_relationship_kwargs=
+                                                   dict(foreign_keys=&quot;[Travel.location_to_id]&quot;),
+                                                   )
+
+</code></pre>
+<h2 id="place">Place</h2>
+<pre><code class="language-Python">class PlaceBase(SQLModel):
+    name: str
+    description: str
+    place_rating: PlaceRating
+    area_id: Optional[int] = Field(default=None, foreign_key=&quot;area.id&quot;)
+
+
+class PlaceShow(PlaceBase):
+    area: Optional[&quot;Area&quot;] = None
+
+
+class Place(PlaceBase, table=True):
+    id: int = Field(default=None, primary_key=True)
+    area: Optional[&quot;Area&quot;] = Relationship(back_populates=&quot;places&quot;)
+    place: Optional[int]
+
+</code></pre>
+<h2 id="travel">Travel</h2>
+<pre><code class="language-Python">class TravelBase(SQLModel):
+    location_from_id: Optional[int] = Field(default=None, foreign_key=&quot;area.id&quot;)
+    location_to_id: Optional[int] = Field(default=None, foreign_key=&quot;area.id&quot;)
+    path_description: str
+    date_start: datetime.datetime
+    date_end: datetime.datetime
+    type_of_travel: TypeOfTravel
+    smth: str
+
+
+class TravelShow(TravelBase):
+    location_from: Optional[&quot;Area&quot;] = None
+    location_to: Optional[&quot;Area&quot;] = None
+    travellers: Optional[List[&quot;UserBase&quot;]] = None
+    traveltogethers: Optional[List[&quot;TravelTogether&quot;]] = None
+
+
+class Travel(TravelBase, table=True):
+    id: int = Field(default=None, primary_key=True)
+    location_from: Optional[&quot;Area&quot;] = Relationship(back_populates=&quot;from_location&quot;,
+                                                   sa_relationship_kwargs=
+                                                   dict(foreign_keys=&quot;[Travel.location_from_id]&quot;),
+                                                   )
+    location_to: Optional[&quot;Area&quot;] = Relationship(back_populates=&quot;to_location&quot;,
+                                                 sa_relationship_kwargs=
+                                                 dict(foreign_keys=&quot;[Travel.location_to_id]&quot;),
+                                                 )
+    travellers: Optional[List[&quot;User&quot;]] = Relationship(
+        back_populates=&quot;travels&quot;, link_model=TravelTogether
+    )
+    traveltogethers: Optional[List[&quot;TravelTogether&quot;]] = Relationship(back_populates=&quot;travels&quot;)
+
+</code></pre>
+<h2 id="traveltogether">TravelTogether</h2>
+<pre><code class="language-Python">class TravelTogetherBase(SQLModel):
+    comment: str
+    travel_id: Optional[int] = Field(default=None, foreign_key=&quot;travel.id&quot;)
+    traveller_id: Optional[int] = Field(default=None, foreign_key=&quot;user.id&quot;)
+
+
+class TravelTogetherShow(TravelTogetherBase):
+    travels: Optional[&quot;Travel&quot;] = None
+    travellers: Optional[&quot;User&quot;] = None
+
+
+class TravelTogether(TravelTogetherBase, table=True):
+    id: int = Field(default=None, primary_key=True)
+    travels: Optional[&quot;Travel&quot;] = Relationship(back_populates=&quot;traveltogethers&quot;)
+    travellers: Optional[&quot;User&quot;] = Relationship(back_populates=&quot;traveltogethers&quot;)
+    field_new: Optional[int] = None
+
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../configuration/" class="btn btn-neutral float-left" title="Основы проекта"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../endpoints/" class="btn btn-neutral float-right" title="Эндпойнты">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../configuration/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../endpoints/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

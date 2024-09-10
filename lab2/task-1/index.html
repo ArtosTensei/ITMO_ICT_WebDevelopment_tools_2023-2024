@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Задание 1 - Лабораторные работы Саунин Антон</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "\u0417\u0430\u0434\u0430\u043d\u0438\u0435 1";
+        var mkdocs_page_input_path = "lab2\\task-1.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Лабораторные работы Саунин Антон
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Лабораторная работа №1</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lab1/configuration/">Основы проекта</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lab1/models/">Модели</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lab1/endpoints/">Эндпойнты</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lab1/routes/">Роутер</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Лабораторная работа №2</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Задание 1</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#multiprocessing">multiprocessing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#async">async</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#threading">threading</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_1">Результаты</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_2">Выводы</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../task-2/">Задание 2</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Лабораторная работа №3</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lab3/base/">Основы проекта</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lab3/docker/">Докер</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../lab3/celery/">Celery</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Лабораторные работы Саунин Антон</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Лабораторная работа №2</li>
+      <li class="breadcrumb-item active">Задание 1</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="1">Задание 1</h1>
+<p>Сравнение 3 подходов в python для решения данной задачи:</p>
+<ul>
+<li>multiprocessing</li>
+<li>threading</li>
+<li>async</li>
+</ul>
+<h2 id="multiprocessing">multiprocessing</h2>
+<pre><code class="language-python">def mp_calculate_part(s, e, res, idx):
+    res[idx] = sum(range(s, e + 1))
+
+
+def mp_calculate_sum():
+    num_tasks = 4
+    n = 1000000
+    tasks_list = []
+    step = n // num_tasks
+
+    manager = multiprocessing.Manager()
+    res = manager.list([0] * num_tasks)
+
+    for i in range(num_tasks):
+        s = i * step + 1
+        e = (i + 1) * step if i != num_tasks - 1 else n
+        process = multiprocessing.Process(target=mp_calculate_part, args=(s, e, res, i))
+        tasks_list.append(process)
+        process.start()
+
+    for process in tasks_list:
+        process.join()
+
+    _sum = sum(res)
+    return _sum
+</code></pre>
+<h2 id="async">async</h2>
+<pre><code class="language-python">async def async_calculate_part(s, e):
+    return sum(range(s, e + 1))
+
+
+async def async_calculate_sum():
+    num_tasks = 4
+    n = 1000000
+    step = n // num_tasks
+    tasks = []
+
+    for i in range(num_tasks):
+        s = i * step + 1
+        e = (i + 1) * step if i != num_tasks - 1 else n
+        tasks.append(asyncio.create_task(async_calculate_part(s, e)))
+
+    results = await asyncio.gather(*tasks)
+    total_sum = sum(results)
+    return total_sum
+</code></pre>
+<h2 id="threading">threading</h2>
+<pre><code class="language-python">def thread_calculate_part(s, e, res, idx):
+    res[idx] = sum(range(s, e + 1))
+
+
+def thread_calculate_sum():
+    num_tasks = 4
+    n = 1000000
+    tasks_list = []
+    result = [0] * num_tasks
+    step = n // num_tasks
+
+    for i in range(num_tasks):
+        start = i * step + 1
+        end = (i + 1) * step if i != num_tasks - 1 else n
+        thread = threading.Thread(target=thread_calculate_part, args=(start, end, result, i))
+        tasks_list.append(thread)
+        thread.start()
+
+    for thread in tasks_list:
+        thread.join()
+
+    total_sum = sum(result)
+    return total_sum
+</code></pre>
+<h2 id="_1">Результаты</h2>
+<pre><code>Async time: 0.04663729667663574 seconds
+Multiprocessing time: 0.6678276062011719 seconds
+Threading time: 0.05602765083312988 seconds
+
+</code></pre>
+<h2 id="_2">Выводы</h2>
+<p>В этой задаче лучше всего себя показали асинк и трэдинг, чем мультипроцессинг, так как в мультипроцессинге есть расходы на создание процессов</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../lab1/routes/" class="btn btn-neutral float-left" title="Роутер"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../task-2/" class="btn btn-neutral float-right" title="Задание 2">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../lab1/routes/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../task-2/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
